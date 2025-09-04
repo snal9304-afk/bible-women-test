@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>성경 속 여성 인물 성격 유형 테스트</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --ink:#0d2240;
+      --sub:#5a6b85;
+      --brand:#2f6ee6;
+      --brand-2:#5bbad5;
+      --good:#17a673;
+      --card:#ffffff;
+      --soft:#e9effa;
+      --badge:#edf2ff;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Gmarket Sans',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:1000px;margin:32px auto;padding:24px}
+    header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .title{font-size:clamp(20px,3vw,34px);font-weight:700;letter-spacing:-0.2px}
+    .subtitle{color:var(--sub);font-size:14px}
+    .card{background:var(--card);border-radius:20px;box-shadow:0 12px 30px rgba(13,34,64,.08);padding:22px}
+    .progress{height:10px;background:#e8eef8;border-radius:999px;overflow:hidden}
+    .bar{height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--brand-2));transition:width .25s ease}
+    .qgrid{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:16px;margin-top:18px}
+    @media(min-width:820px){.qgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .q{border:1px solid #e6ecf7;border-radius:16px;padding:16px}
+    .q h4{margin:0 0 10px 0;font-size:16px;line-height:1.4}
+    .opts{display:flex;gap:10px;flex-wrap:wrap}
+    .opt{flex:1 1 180px;border:1px solid #dfe8fb;border-radius:12px;padding:12px;cursor:pointer;transition:.2s;background:#fafcff}
+    .opt input{display:none}
+    .opt span{display:block}
+    .opt:hover{box-shadow:0 8px 18px rgba(47,110,230,.12)}
+    .opt.active{border-color:var(--brand);background:#f1f6ff;outline:2px solid #e4eeff}
+    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+    button{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer}
+    .primary{background:var(--brand);color:#fff}
+    .ghost{background:#eef3fe;color:var(--brand)}
+    .muted{background:#f1f4f9;color:#4b5a73}
+    .result-area{margin-top:24px;display:none}
+    .result-head{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:var(--badge);color:#24407a;border-radius:999px;padding:6px 12px;font-size:13px}
+    .poster{position:relative;border-radius:24px;overflow:hidden;background:linear-gradient(135deg,#e8f0ff,#ffffff 45%,#e8fff7);border:1px solid #e6eef8}
+    .poster-inner{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;padding:24px}
+    @media(max-width:760px){.poster-inner{grid-template-columns:1fr}}
+    .illus{display:flex;align-items:center;justify-content:center;background:linear-gradient(130deg,#f7fbff,#f0f6ff);border-radius:18px;border:1px solid #e7eef9;padding:12px;min-height:260px}
+    .illus svg{width:88%;max-width:420px;height:auto}
+    .desc h2{margin:0 0 6px 0;font-size:28px}
+    .desc p{margin:6px 0;color:#3d4a62;line-height:1.45}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .chip{background:var(--soft);border:1px solid #dfe8fb;border-radius:999px;padding:6px 10px;font-size:12px}
+    .mini-bars{display:grid;grid-template-columns:1fr;gap:6px;margin-top:12px}
+    .barrow{display:flex;align-items:center;gap:10px}
+    .barrow span{min-width:122px;font-size:12px;color:#5a6b85}
+    .barout{flex:1;height:8px;background:#eef3fe;border-radius:999px;overflow:hidden}
+    .barin{height:100%;width:50%;background:linear-gradient(90deg,#25bba5,#6ee7b7)}
+    .poster-footer{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+    .note{font-size:12px;color:#6b7896}
+    .download{background:var(--good);color:#fff}
+    .again{background:#ffecec;color:#da3d3d}
+    footer{margin-top:26px;color:#6b7896;font-size:12px;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="title">성경 속 여성 인물 성격 유형 테스트</div>
+        <div class="subtitle">16문항 A/B 선택 → 8유형 매칭 · 결과 포스터를 이미지(PNG)로 저장할 수 있어요.</div>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="progress" aria-label="진행률"><div id="progressBar" class="bar" style="width:0%"></div></div>
+
+      <form id="quiz">
+        <div id="qGrid" class="qgrid"></div>
+        <div class="actions">
+          <button type="button" class="muted" id="resetBtn">초기화</button>
+          <button type="button" class="ghost" id="fillDemo">예시로 채우기</button>
+          <button type="submit" class="primary">결과 보기</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="resultArea" class="result-area">
+      <div class="card poster" id="posterCard">
+        <div class="poster-inner">
+          <div class="illus" id="illus"></div>
+          <div class="desc">
+            <div class="badge" id="typeBadge">유형</div>
+            <h2 id="typeTitle">당신의 유형</h2>
+            <p id="typeSummary">설명</p>
+            <div class="chips" id="chips"></div>
+
+            <div class="mini-bars">
+              <div class="barrow"><span>리더십 ↔ 섬김</span><div class="barout"><div class="barin" id="barL"></div></div></div>
+              <div class="barrow"><span>믿음행동 ↔ 신중계획</span><div class="barout"><div class="barin" id="barF"></div></div></div>
+              <div class="barrow"><span>표현적 ↔ 내향적</span><div class="barout"><div class="barin" id="barE"></div></div></div>
+              <div class="barrow"><span>선교지향 ↔ 관계/가정</span><div class="barout"><div class="barin" id="barM"></div></div></div>
+            </div>
+
+            <div class="poster-footer">
+              <div class="note" id="bibleRef">관련 성경: —</div>
+              <div>
+                <button class="download" id="downloadBtn">이미지로 저장</button>
+                <button class="again" id="againBtn">다시 하기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer>※ 본 테스트는 재미와 나눔을 위한 참고용입니다.</footer>
+    </div>
+  </div>
+
+<script>
+/**
+ * 1) 질문 정의 (16문항)
+ * 각 문항의 A/B 선택은 4축(L,F,E,M)에 가중치를 부여합니다.
+ * 축 범위: -3(섬김/계획/내향/관계) ~ +3(리더/행동/표현/선교)
+ */
+const QUESTIONS = [
+  { id:1,  text:"새로운 일이 주어졌을 때 나는…",
+    A:"믿고 먼저 행동한다",  B:"충분히 준비한 후 움직인다",
+    Amap:{L:+1,F:+1}, Bmap:{F:-1} },
+  { id:2,  text:"누군가 어려움에 처했을 때 나는…",
+    A:"즉시 달려가 돕는다",  B:"묵묵히 기도하며 지켜본다",
+    Amap:{E:+1,M:+1}, Bmap:{E:-1,M:-1} },
+  { id:3,  text:"사람들 앞에 서는 일은…",
+    A:"즐겁다(주도·리드)", B:"부담된다(뒤에서 지원)",
+    Amap:{L:+1,E:+1}, Bmap:{L:-1,E:-1} },
+  { id:4,  text:"중요 결정을 내릴 때 나는…",
+    A:"확신이 오면 결단한다", B:"상황을 분석해 합리적으로 결정",
+    Amap:{F:+1}, Bmap:{F:-1} },
+  { id:5,  text:"친한 사람이 떠나려 할 때 나는…",
+    A:"끝까지 붙잡는다", B:"시간을 두고 기다린다",
+    Amap:{M:-1,E:+1}, Bmap:{E:-1,M:-1} },
+  { id:6,  text:"계획 수립 스타일은…",
+    A:"큰 그림부터 잡는다", B:"세부 단계까지 꼼꼼히",
+    Amap:{L:+1}, Bmap:{F:-1} },
+  { id:7,  text:"문제에 부딪히면…",
+    A:"부딪혀 해결", B:"때를 기다리며 지혜 찾기",
+    Amap:{F:+1}, Bmap:{F:-1} },
+  { id:8,  text:"공동체에서 더 편한 역할은…",
+    A:"중심에서 이끌기", B:"뒷받침하는 조력",
+    Amap:{L:+1}, Bmap:{L:-1} },
+  { id:9,  text:"감정 표현은…",
+    A:"바로 드러내는 편", B:"차분히 눌렀다가 나중에",
+    Amap:{E:+1}, Bmap:{E:-1} },
+  { id:10, text:"신앙 실천은…",
+    A:"기도하고 즉시 움직임", B:"묵상하며 오래 준비",
+    Amap:{F:+1,M:+1}, Bmap:{F:-1} },
+  { id:11, text:"위기 순간 나는…",
+    A:"할 수 있는 일부터 행동", B:"하나님 일하심을 기다림",
+    Amap:{F:+1,L:+1}, Bmap:{F:-1} },
+  { id:12, text:"복음 전할 때 나는…",
+    A:"담대히 직접 권유", B:"삶으로 보여주기",
+    Amap:{M:+1,E:+1}, Bmap:{M:-1} },
+  { id:13, text:"끌리는 사람상은…",
+    A:"열정·카리스마형", B:"따뜻·섬세 배려형",
+    Amap:{E:+1,L:+1}, Bmap:{L:-1} },
+  { id:14, text:"닮고 싶은 모습은…",
+    A:"용기·결단 리더십", B:"인내·섬김의 신실함",
+    Amap:{L:+1,F:+1}, Bmap:{L:-1,M:-1} },
+  { id:15, text:"사역/봉사 선호는…",
+    A:"밖으로 나가는 선교·전도", B:"공동체 내 돌봄·가정",
+    Amap:{M:+1}, Bmap:{M:-1} },
+  { id:16, text:"갈등 상황에서 나는…",
+    A:"앞장서 중재하고 해결", B:"열기 식힌 뒤 조용히 수습",
+    Amap:{L:+1,E:+1}, Bmap:{E:-1} },
+];
+
+/**
+ * 2) 유형 정의: 각 인물의 목표 벡터(L,F,E,M: -3~+3)
+ */
+const TYPES = {
+  esther:  {
+    name:"에스더형", badge:"지혜롭고 용감한 리더",
+    vector:{L:+2,F:-1,E:-0.5,M:+1},
+    tags:["지혜","용기","결단","중보"],
+    ref:"에스더 4:14",
+    summary:"위기 속에서도 지혜롭게 때를 분별하고 담대히 결단하는 리더형. 섬세한 배려와 전략이 강점입니다.",
+    svg: estherSVG
+  },
+  deborah: {
+    name:"드보라형", badge:"담대한 카리스마",
+    vector:{L:+3,F:+2,E:+1,M:+2},
+    tags:["판단","카리스마","담대함","격려"],
+    ref:"사사기 4–5장",
+    summary:"지혜로운 통찰과 담대한 실행력으로 공동체를 일으키는 카리스마 리더. 결단과 격려에 강합니다.",
+    svg: deborahSVG
+  },
+  mary:   {
+    name:"마리아형(베다니)", badge:"묵상과 헌신",
+    vector:{L:-2,F:+1,E:-2,M:-2},
+    tags:["묵상","말씀사랑","내적신앙","경청"],
+    ref:"누가복음 10:39",
+    summary:"분주함 속에서도 본질을 붙드는 묵상가. 깊이 듣고 마음에 간직하며 본질로 이끄는 힘이 있습니다.",
+    svg: marySVG
+  },
+  martha: {
+    name:"마르다형", badge:"실무형 섬김이",
+    vector:{L:-1,F:-2,E:-0.5,M:-2},
+    tags:["책임감","실행","환대","관리"],
+    ref:"누가복음 10:40–41",
+    summary:"현실 감각과 실행력이 뛰어난 섬김형. 공동체의 필요를 민감하게 돌보는 든든한 실무자입니다.",
+    svg: marthaSVG
+  },
+  hannah: {
+    name:"한나형", badge:"기도와 인내",
+    vector:{L:-2,F:+1,E:-1,M:-2},
+    tags:["간구","인내","신의","소망"],
+    ref:"사무엘상 1–2장",
+    summary:"눈물로 씨를 뿌리되 믿음으로 기다리는 기도의 사람. 조용하지만 강한 내적 힘을 지녔습니다.",
+    svg: hannahSVG
+  },
+  ruth:   {
+    name:"룻형", badge:"충성·헌신",
+    vector:{L:-1,F:0,E:-1,M:-2},
+    tags:["충성","동행","헌신","관계"],
+    ref:"룻기 1:16–17",
+    summary:"끝까지 곁을 지키는 따뜻한 동행자. 관계와 신실함으로 공동체를 견고히 세웁니다.",
+    svg: ruthSVG
+  },
+  sarah:  {
+    name:"사라형", badge:"현실적 지혜",
+    vector:{L:-1,F:-2,E:-1,M:-2},
+    tags:["신중","가정","분별","보호"],
+    ref:"창세기 18장",
+    summary:"신중하고 현실 감각이 뛰어난 보호자. 가정과 공동체를 안정적으로 지키는 지혜가 강점입니다.",
+    svg: sarahSVG
+  },
+  magdalene:{
+    name:"막달라 마리아형", badge:"열정적 헌신",
+    vector:{L:0,F:+3,E:+3,M:+3},
+    tags:["사랑","열정","증언","헌신"],
+    ref:"요한복음 20장",
+    summary:"은혜를 깊이 기억하고 사랑으로 달려가는 증언자. 뜨거운 열정과 헌신으로 선교에 헌신합니다.",
+    svg: magdaleneSVG
+  },
+};
+
+/** 3) UI 생성 */
+const qGrid = document.getElementById('qGrid');
+QUESTIONS.forEach(q=>{
+  const box = document.createElement('div'); box.className='q'; box.id=`q${q.id}`;
+  box.innerHTML = `
+    <h4>${q.id}. ${q.text}</h4>
+    <div class="opts">
+      <label class="opt"><input type="radio" name="q${q.id}" value="A"><span>① ${q.A}</span></label>
+      <label class="opt"><input type="radio" name="q${q.id}" value="B"><span>② ${q.B}</span></label>
+    </div>`;
+  qGrid.appendChild(box);
+});
+
+/** 클릭 선택 스타일 */
+document.querySelectorAll('.opt').forEach(lab=>{
+  lab.addEventListener('click', ()=>{
+    const group = lab.querySelector('input').name;
+    document.querySelectorAll(`input[name="${group}"]`).forEach(i=>i.parentElement.classList.remove('active'));
+    lab.classList.add('active');
+    updateProgress();
+  });
+});
+
+/** 진행률 */
+function updateProgress(){
+  const answered = [...document.querySelectorAll('input[type="radio"]:checked')].length;
+  const pct = Math.round(answered/QUESTIONS.length*100);
+  document.getElementById('progressBar').style.width = pct+'%';
+}
+
+/** 점수 계산 */
+function calcScores(){
+  const vec = {L:0,F:0,E:0,M:0};
+  for(const q of QUESTIONS){
+    const v = (document.querySelector(`input[name="q${q.id}"]:checked`)||{}).value;
+    if(!v) return null; // 미완료
+    const map = v==='A'? q.Amap : q.Bmap;
+    for(const k in map){ vec[k]+=map[k]; }
+  }
+  // 클램프 (-8~+8 정도 범위) → -3~+3로 정규화
+  const maxAbs= Math.max(...Object.values(vec).map(v=>Math.abs(v)),1);
+  const norm = {};
+  for(const k of ['L','F','E','M']){
+    norm[k] = Math.max(-3, Math.min(3, (vec[k]/8)*3* (8/maxAbs) )); // 대략적 스케일
+  }
+  return norm;
+}
+
+/** 유형 매칭 (가중 유클리드 거리) */
+function matchType(norm){
+  let bestKey=null, bestScore=Infinity;
+  const weights = {L:1.2,F:1.0,E:1.0,M:1.2};
+  for(const key in TYPES){
+    const tvec = TYPES[key].vector;
+    let d=0;
+    for(const k of ['L','F','E','M']){
+      const diff = (norm[k]-tvec[k]);
+      d += (diff*diff)*weights[k];
+    }
+    if(d<bestScore){bestScore=d;bestKey=key;}
+  }
+  return bestKey;
+}
+
+/** 결과 표시 */
+const resultArea = document.getElementById('resultArea');
+const illus = document.getElementById('illus');
+const typeBadge = document.getElementById('typeBadge');
+const typeTitle = document.getElementById('typeTitle');
+const typeSummary = document.getElementById('typeSummary');
+const chips = document.getElementById('chips');
+const barL = document.getElementById('barL');
+const barF = document.getElementById('barF');
+const barE = document.getElementById('barE');
+const barM = document.getElementById('barM');
+const bibleRef = document.getElementById('bibleRef');
+
+document.getElementById('quiz').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const norm = calcScores();
+  if(!norm){
+    alert('모든 문항에 응답해 주세요.');
+    return;
+  }
+  const key = matchType(norm);
+  renderResult(key, norm);
+  resultArea.style.display='block';
+  window.scrollTo({top: resultArea.offsetTop-8, behavior:'smooth'});
+});
+
+/** 막대 위치 ( -3~+3 → 0~100%) */
+function posFrom(val){ // -3 .. +3
+  const pct = Math.round((val+3)/6*100);
+  return Math.max(0,Math.min(100,pct))+'%';
+}
+
+function renderBars(norm){
+  barL.style.width = posFrom(norm.L);
+  barF.style.width = posFrom(norm.F);
+  barE.style.width = posFrom(norm.E);
+  barM.style.width = posFrom(norm.M);
+}
+
+/** chips 생성 */
+function renderChips(arr){
+  chips.innerHTML='';
+  arr.forEach(t=>{
+    const el = document.createElement('div');
+    el.className='chip';
+    el.textContent = t;
+    chips.appendChild(el);
+  });
+}
+
+/** 결과 렌더링 */
+function renderResult(key, norm){
+  const T = TYPES[key];
+  typeBadge.textContent = T.badge;
+  typeTitle.textContent = `당신은 ${T.name}`;
+  typeSummary.textContent = T.summary;
+  renderChips(T.tags);
+  bibleRef.textContent = `관련 성경: ${T.ref}`;
+  illus.innerHTML = T.svg();
+  renderBars(norm);
+}
+
+/** 예시 채우기 */
+document.getElementById('fillDemo').addEventListener('click', ()=>{
+  // 에스더·드보라 쪽으로 약간 기울어진 예시
+  QUESTIONS.forEach(q=>{
+    const pickA = Math.random() < 0.62; // A 응답 비율
+    const input = document.querySelector(`input[name="q${q.id}"][value="${pickA?'A':'B'}"]`);
+    input.checked = true;
+    // 스타일
+    const grp = document.querySelectorAll(`input[name="q${q.id}"]`);
+    grp.forEach(i=>i.parentElement.classList.remove('active'));
+    input.parentElement.classList.add('active');
+  });
+  updateProgress();
+});
+
+/** 초기화 */
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  document.querySelectorAll('input[type="radio"]').forEach(i=>{i.checked=false;i.parentElement.classList.remove('active');});
+  document.getElementById('progressBar').style.width='0%';
+  resultArea.style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/** 다시 하기 */
+document.getElementById('againBtn').addEventListener('click', (e)=>{
+  e.preventDefault();
+  document.getElementById('resetBtn').click();
+});
+
+/** 다운로드 */
+document.getElementById('downloadBtn').addEventListener('click', async (e)=>{
+  e.preventDefault();
+  const card = document.getElementById('posterCard');
+  const canvas = await html2canvas(card,{backgroundColor:null,scale:2});
+  const data = canvas.toDataURL('image/png');
+  const link = document.createElement('a');
+  const ttl = document.getElementById('typeTitle').textContent.replace(/\s+/g,'_');
+  link.href = data;
+  link.download = `${ttl}.png`;
+  link.click();
+});
+
+/** 4) 인물 일러스트(SVG)들 — 심볼+아이콘 조합으로 가볍게 */
+function estherSVG(){
+  return `
+  <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-label="에스더 일러스트">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ffe082"/><stop offset="1" stop-color="#ffd54f"/>
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="600" height="420" rx="18" fill="#f7fbff"/>
+    <circle cx="140" cy="210" r="90" fill="url(#g1)"/>
+    <path d="M110 170 L140 120 L170 170 Z" fill="#f9a825"/>
+    <rect x="115" y="175" width="50" height="50" rx="8" fill="#fff8e1" stroke="#f6c453"/>
+    <text x="230" y="165" font-size="32" fill="#21314f" font-weight="700">에스더</text>
+    <text x="230" y="205" font-size="18" fill="#3d4a62">지혜 · 용기 · 결단 · 중보</text>
+    <g transform="translate(230,230)">
+      <rect x="0" y="0" width="320" height="140" rx="14" fill="#eef5ff" stroke="#dbe7ff"/>
+      <text x="16" y="36" font-size="16" fill="#2f5dbf">위기 속 지혜로운 타이밍</text>
+      <text x="16" y="66" font-size="16" fill="#2f5dbf">담대한 결단과 배려</text>
+      <text x="16" y="96" font-size="16" fill="#2f5dbf">공동체를 위한 중보</text>
+    </g>
+  </svg>`;
+}
+function deborahSVG(){
+  return `
+  <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-label="드보라 일러스트">
+    <rect width="600" height="420" rx="18" fill="#f0fff8"/>
+    <g transform="translate(60,70)">
+      <circle cx="70" cy="140" r="70" fill="#b2f5ea"/>
+      <g transform="translate(28,92)">
+        <rect x="0" y="0" width="84" height="16" rx="8" fill="#26a69a"/>
+        <rect x="34" y="-24" width="16" height="64" rx="8" fill="#26a69a"/>
+      </g>
+    </g>
+    <text x="220" y="150" font-size="32" fill="#0b3a2b" font-weight="700">드보라</text>
+    <text x="220" y="188" font-size="18" fill="#245846">카리스마 · 판단 · 담대함 · 격려</text>
+    <g transform="translate(220,210)">
+      <rect x="0" y="0" width="330" height="150" rx="14" fill="#e7fff5" stroke="#b7f7e7"/>
+      <text x="16" y="40" font-size="16" fill="#0e6b52">지혜로운 통찰과 리더십</text>
+      <text x="16" y="74" font-size="16" fill="#0e6b52">위축된 이들을 일으킴</text>
+      <text x="16" y="108" font-size="16" fill="#0e6b52">하나님 신뢰로 전진</text>
+    </g>
+  </svg>`;
+}
+function marySVG(){
+  return `
+  <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-label="베다니 마리아 일러스트">
+    <rect width="600" height="420" rx="18" fill="#fffaf2"/>
+    <g transform="translate(60,70)">
+      <circle cx="80" cy="140" r="70" fill="#ffe0b2"/>
+      <rect x="40" y="120" width="80" height="40" rx="8" fill="#fff" stroke="#ffc387"/>
+      <path d="M60 135 h40" stroke="#ffb74d" stroke-width="4" />
+    </g>
+    <text x="220" y="150" font-size="32" fill="#4a2c0a" font-weight="700">마리아(베다니)</text>
+    <text x="220" y="188" font-size="18" fill="#6b3e14">묵상 · 경청 · 내적신앙 · 본질</text>
+    <g transform="translate(220,210)">
+      <rect x="0" y="0" width="330" height="150" rx="14" fill="#fff3e0" stroke="#ffe0b2"/>
+      <text x="16" y="40" font-size="16" fill="#6b3e14">분주함 속 본질을 붙듦</text>
+      <text x="16" y="74" font-size="16" fill="#6b3e14">말씀에 귀 기울이는 마음</text>
+      <text x="16" y="108" font-size="16" fill="#6b3e14">조용한 영향력</text>
+    </g>
+  </svg>`;
+}
+function marthaSVG(){
+  return `
+  <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-label="마르다 일러스트">
+    <rect width="600" height="420" rx="18" fill="#f2f7ff"/>
+    <g transform="translate(60,70)">
+      <circle cx="80" cy="140" r="70" fill="#c5d8ff"/>
+      <rect x="40" y="120" width="80" height="40" rx="14" fill="#fff" stroke="#b3c9ff"/>
+      <circle cx="60" cy="140" r="6" fill="#6b86d6"/>
+      <circle cx="100" cy="140" r="6" fill="#6b86d6"/>
+    </g>
+    <text x="220" y="150" font-size="32" fill="#1f2f5c" font-weight="700">마르다</text>
+    <text x="220" y="188" font-size="18" fill="#324a86">실무 · 책임감 · 환대 · 관리</text>
+    <g transform="translate(220,210)">
+      <rect x="0" y="0" width="330" height="150" rx="14" fill="#eaf1ff" stroke="#d7e4ff"/>
+      <text x="16" y="40" font-size="16" fill="#1f2f5c">필요를 세심히 챙기는 손</text>
+      <text x="16" y="74" font-size="16" fill="#1f2f5c">안정과 질서의 빌더</text>
+      <text x="16" y="108" font-size="16" fill="#1f2f5c">실행력 있는 섬김</text>
+    </g>
+  </svg>`;
+}
+function hannahSVG(){
+  return `
+  <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-label="한나 일러스트">
+    <rect width="600" height="420" rx="18" fill="#f7f9ff"/>
+    <g transform="translate(60,70)">
+      <circle cx="80" cy="140" r="70" fill="#d1e8ff"/>
+      <path d="M60 130 q20 -20 40 0" stroke="#5aa9ff" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M60 150 q20 -20 40 0" stroke="#5aa9ff" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </g>
+    <text x="220" y="150" font-size="32" fill="#103e7a" font-weight="700">한나</text>
+    <text x="220" y="188" font-size="18" fill="#275e9a">기도 · 인내 · 신의 · 소망</text>
+    <g transform="translate(220,210)">
+      <rect x="0" y="0" width="330" height="150" rx="14" fill="#eef6ff" stroke="#d6e9ff"/>
+      <text x="16" y="40" font-size="16" fill="#103e7a">눈물의 기도, 신실한 기다림</text>
+      <text x="16" y="74" font-size="16" fill="#103e7a">고난 속 소망을 붙듦</text>
+      <text x="16" y="108" font-size="16" fill="#103e7a">내면의 강인함</text>
+    </g>
+  </svg>`;
+}
+function ruthSVG(){
+  return `
+  <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-label="룻 일러스트">
+    <rect width="600" height="420" rx="18" fill="#fffef5"/>
+    <g transform="translate(60,70)">
+      <circle cx="80" cy="140" r="70" fill="#fff2b3"/>
+      <path d="M40 160 q40 -80 80 0" stroke="#f7c948" stroke-width="8" fill="none"/>
+      <path d="M50 168 q30 -60 60 0" stroke="#e6b93a" stroke-width="6" fill="none"/>
+    </g>
+    <text x="220" y="150" font-size="32" fill="#6a5200" font-weight="700">룻</text>
+    <text x="220" y="188" font-size="18" fill="#7e6307">충성 · 동행 · 헌신 · 관계</text>
+    <g transform="translate(220,210)">
+      <rect x="0" y="0" width="330" height="150" rx="14" fill="#fff8d9" stroke="#ffec9a"/>
+      <text x="16" y="40" font-size="16" fill="#6a5200">끝까지 곁을 지키는 신실함</text>
+      <text x="16" y="74" font-size="16" fill="#6a5200">작은 충성이 큰 길을 엶</text>
+      <text x="16" y="108" font-size="16" fill="#6a5200">관계 중심의 따뜻함</text>
+    </g>
+  </svg>`;
+}
+function sarahSVG(){
+  return `
+  <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-label="사라 일러스트">
+    <rect width="600" height="420" rx="18" fill="#f8fbff"/>
+    <g transform="translate(60,70)">
+      <circle cx="80" cy="140" r="70" fill="#dbe9ff"/>
+      <polygon points="35,175 125,175 80,130" fill="#bcd6ff"/>
+      <rect x="50" y="170" width="60" height="20" fill="#a9c7ff"/>
+    </g>
+    <text x="220" y="150" font-size="32" fill="#0d2240" font-weight="700">사라</text>
+    <text x="220" y="188" font-size="18" fill="#2b4573">신중 · 가정 · 분별 · 보호</text>
+    <g transform="translate(220,210)">
+      <rect x="0" y="0" width="330" height="150" rx="14" fill="#eef5ff" stroke="#d9e6ff"/>
+      <text x="16" y="40" font-size="16" fill="#0d2240">가정을 지키는 현실적 지혜</text>
+      <text x="16" y="74" font-size="16" fill="#0d2240">신중한 분별과 보호 본능</text>
+      <text x="16" y="108" font-size="16" fill="#0d2240">안정감과 책임</text>
+    </g>
+  </svg>`;
+}
+function magdaleneSVG(){
+  return `
+  <svg viewBox="0 0 600 420" xmlns="http://www.w3.org/2000/svg" aria-label="막달라 마리아 일러스트">
+    <rect width="600" height="420" rx="18" fill="#fff7fb"/>
+    <g transform="translate(60,70)">
+      <circle cx="80" cy="140" r="70" fill="#ffc4de"/>
+      <path d="M40 175 q40 -50 80 0" stroke="#ff8fb1" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <circle cx="80" cy="150" r="14" fill="#ff5f94"/>
+    </g>
+    <text x="220" y="150" font-size="32" fill="#7a0f3b" font-weight="700">막달라 마리아</text>
+    <text x="220" y="188" font-size="18" fill="#9a2c57">사랑 · 열정 · 증언 · 헌신</text>
+    <g transform="translate(220,210)">
+      <rect x="0" y="0" width="330" height="150" rx="14" fill="#ffe3f0" stroke="#ffc9df"/>
+      <text x="16" y="40" font-size="16" fill="#7a0f3b">은혜를 기억하는 뜨거운 사랑</text>
+      <text x="16" y="74" font-size="16" fill="#7a0f3b">기쁜 소식을 전하는 증언자</text>
+      <text x="16" y="108" font-size="16" fill="#7a0f3b">헌신으로 선교에 동참</text>
+    </g>
+  </svg>`;
+}
+
+</script>
+</body>
+</html>
